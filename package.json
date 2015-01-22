@@ -2,6 +2,22 @@
   "name": "photoapp",
   "version": "1.0.0",
   "description": "photoapp: An Ionic project",
+  "author": {
+    "name": "AJ Zane",
+    "email": "androiddreams@AJZane.com",
+    "url": "azanebrain.github.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azanebrain/photoapp.git"
+  },
+  "license": "GPLv3",
+  "scripts": {
+    "build": "echo \"Error: no build task specified\" && exit 1",
+    "postinstall": "node_modules/.bin/bower install",
+    "serve": "ionic run android -l -c -s",
+    "test": "echo \"Error: no tests specified\" && exit 1"
+  },
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^0.7.1",

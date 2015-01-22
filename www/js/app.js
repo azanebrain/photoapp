@@ -3,9 +3,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+var app = angular.module('starter', ['ionic', 'ngCordova']);
 
-.run(function($ionicPlatform) {
+app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,4 +16,75 @@ angular.module('starter', ['ionic'])
       StatusBar.styleDefault();
     }
   });
-})
+});
+
+/**
+* Demo that takes a picture and applies the
+*/
+app.controller("ExampleController", function($scope, $cordovaCamera) {
+
+  $scope.takePicture = function() {
+    console.log("IN TAKE PIC");
+    var options = {
+      quality : 75,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: true
+    };
+    console.log("OPTIONS SET");
+
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      console.log("UPDATING IMGURI");
+      $scope.imgURI = "data:image/jpeg;base64," + imageData;
+      // console.log("NEW IMGURI: " + $scope.imgURI);
+    }, function(err) {
+      console.log("ERROR:");
+      console.error("AN ERRERRR" + err);
+      // An error occured. Show a message to the user
+    });
+  }
+
+});
+
+/**
+* This will store the picture to the gallery
+*/
+app.controller('PictureCtrl', function($scope, $cordovaCamera) {
+
+  $scope.storePicture = function() {
+    // document.addEventListener("deviceready", function () {
+
+    var options = {
+      quality : 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 300,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: true
+    };
+
+    $cordovaCamera.getPicture(options).then(function(imageURI) {
+      var image = document.getElementById('myImage');
+      image.src = imageURI;
+      // console.debug("New image: " + imageURI);
+    }, function(err) {
+      // error
+      console.error("AN ERRERRR" + err);
+    });
+
+
+    $cordovaCamera.cleanup().then(function(){
+      console.log('camera cleanup');
+    }); // only for FILE_URI
+
+    // }, false);
+  }
+});
